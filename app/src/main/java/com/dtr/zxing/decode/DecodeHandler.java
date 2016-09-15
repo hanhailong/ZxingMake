@@ -104,7 +104,9 @@ public class DecodeHandler extends Handler {
 //		}
 
         long startTime = System.currentTimeMillis();
-        String textResult = mQbarNative.decode(rotatedData, size.width, size.height);
+        Rect rect = activity.getCropRect();
+        String textResult = mQbarNative.decode(rotatedData, size.width, size.height
+                , rect.left, rect.top, rect.width(), rect.height(), false);
 
         Handler handler = activity.getHandler();
         if (!TextUtils.isEmpty(textResult)) {
