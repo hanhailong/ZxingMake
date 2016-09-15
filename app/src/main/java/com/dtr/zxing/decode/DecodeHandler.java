@@ -91,11 +91,11 @@ public class DecodeHandler extends Handler {
         size.height = tmp;
 
 //		Result rawResult = null;
-//        String textResult = "";
 //		PlanarYUVLuminanceSource source = buildLuminanceSource(rotatedData, size.width, size.height);
 //		if (source != null) {
 //			BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
 //			try {
+//				rawResult = multiFormatReader.decodeWithState(bitmap);
 //			} catch (ReaderException re) {
 //				// continue
 //			} finally {
