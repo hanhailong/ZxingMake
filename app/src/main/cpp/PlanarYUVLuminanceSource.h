@@ -27,6 +27,7 @@ namespace qrviddec {
         ArrayRef<char> getMatrix() const;
         bool isCropSupported() const;
         Ref<LuminanceSource> crop(int left, int top, int width, int height) const;
+        void reverseHorizontal(int width,int height) const;
     };
 }
 

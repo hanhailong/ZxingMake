@@ -18,7 +18,6 @@ package com.dtr.zxing.decode;
 
 import android.graphics.Bitmap;
 import android.graphics.Rect;
-import android.hardware.Camera.Size;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -76,19 +75,21 @@ public class DecodeHandler extends Handler {
      * @param height The height of the preview frame.
      */
     private void decode(byte[] data, int width, int height) {
-        Size size = activity.getCameraManager().getPreviewSize();
-
+//        Camera.Size size = activity.getCameraManager().getPreviewSize();
+        long startTime = System.currentTimeMillis();
+//
+        //这个地方需要优化一下代码,改成C/C++,能提高效率
         // 这里需要将获取的data翻转一下，因为相机默认拿的的横屏的数据
         byte[] rotatedData = new byte[data.length];
-        for (int y = 0; y < size.height; y++) {
-            for (int x = 0; x < size.width; x++)
-                rotatedData[x * size.height + size.height - y - 1] = data[x + y * size.width];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++)
+                rotatedData[x * height + height - y - 1] = data[x + y * width];
         }
-
+        data = rotatedData;
         // 宽高也要调整
-        int tmp = size.width;
-        size.width = size.height;
-        size.height = tmp;
+        int tmp = width;
+        width = height;
+        height = tmp;
 
 //		Result rawResult = null;
 //		PlanarYUVLuminanceSource source = buildLuminanceSource(rotatedData, size.width, size.height);
@@ -103,16 +104,18 @@ public class DecodeHandler extends Handler {
 //			}
 //		}
 
-        long startTime = System.currentTimeMillis();
         Rect rect = activity.getCropRect();
-        String textResult = mQbarNative.decode(rotatedData, size.width, size.height
-                , rect.left, rect.top, rect.width(), rect.height(), false);
+        long decodeStartTime = System.currentTimeMillis();
+        String textResult = mQbarNative.decode(data, width, height
+                , rect.left, rect.top, rect.width(), rect.height(), false, false);
 
         Handler handler = activity.getHandler();
         if (!TextUtils.isEmpty(textResult)) {
             // Don't log the barcode contents for security.
             if (handler != null) {
-                Log.e("DecodeHandler", "解码时间为:" + (System.currentTimeMillis() - startTime));
+                long endTime = System.currentTimeMillis();
+                Log.e("DecodeHandler", "解码时间为:" + (endTime - startTime));
+                Log.e("DecodeHandler", "真正的解码时间为:" + (endTime - decodeStartTime));
                 Message message = Message.obtain(handler, R.id.decode_succeeded, textResult);
                 Bundle bundle = new Bundle();
 //				bundleThumbnail(source, bundle);

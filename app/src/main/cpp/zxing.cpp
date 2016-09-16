@@ -21,13 +21,28 @@ Java_com_wuba_zxing_QbarNative_decode(JNIEnv *env, jobject instance,
                                                                  jint width, jint height,
                                                                  jint cropLeft, jint cropTop, jint cropWidth,
                                                                  jint cropHeight,
+                                                                 jboolean isRotate,
                                                                  jboolean reverseHorizontal) {
     jbyte *yuvData = env->GetByteArrayElements(yuvData_, NULL);
 
     std::string codeResult = "";
     try {
+        char *rotateData;
+        if (isRotate) {
+            rotateData = new char[width * height];
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width; x++)
+                    rotateData[x * height + height - y - 1] = yuvData[x + y * width];
+            }
+            jint temp = width;
+            width = height;
+            height = temp;
+        }else{
+            rotateData = (char *)yuvData;
+        }
+
         // Convert the buffer to something that the library understands.
-        ArrayRef<char> data((char*)yuvData, width*height);
+        ArrayRef<char> data(rotateData, width*height);
         Ref<LuminanceSource> source (new PlanarYUVLuminanceSource(data, width, height,cropLeft,cropTop,cropWidth,cropHeight,reverseHorizontal));
         
         // Turn it into a binary image.

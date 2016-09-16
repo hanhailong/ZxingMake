@@ -8,7 +8,7 @@
 namespace qrviddec {
 
     PlanarYUVLuminanceSource::PlanarYUVLuminanceSource(ArrayRef<char> inYuvData,int inDataWidth,
-    int inDataHeight,int inLeft,int inTop,int inWidth,int inHeight,bool reverseHorizontal)
+    int inDataHeight,int inLeft,int inTop,int inWidth,int inHeight,bool reverseHorizontals)
     : LuminanceSource(inWidth,inHeight){
         
         if (inLeft + inWidth > inDataWidth || inTop + inHeight > inDataHeight) {
@@ -21,9 +21,9 @@ namespace qrviddec {
         left = inLeft;
         top = inTop;
         
-//        if (reverseHorizontal) {
-//            reverseHorizontal(inWidth,inHeight);
-//        }
+        if (reverseHorizontals) {
+            reverseHorizontal(inWidth,inHeight);
+        }
     }
     
     PlanarYUVLuminanceSource::~PlanarYUVLuminanceSource(){
@@ -96,16 +96,17 @@ namespace qrviddec {
         return source;
     }
     
-//    private void reverseHorizontal(int width , int height){
-//        ArrayRef<char> tempData = yuvData;
-//
-//        for (int y = 0, rowStart = top * dataWidth + left; y < height; y++, rowStart += dataWidth) {
-//            int middle = rowStart + width / 2;
-//            for (int x1 = rowStart, x2 = rowStart + width - 1; x1 < middle; x1++, x2--) {
-//                byte temp = tempData[x1];
-//                tempData[x1] = tempData[x2];
-//                tempData[x2] = temp;
-//            }
-//        }
-//    }
+    void PlanarYUVLuminanceSource::reverseHorizontal(int width , int height) const {
+        ArrayRef<char> tempData = yuvData;
+
+        for (int y = 0, rowStart = top * dataWidth + left; y < height; y++, rowStart += dataWidth) {
+            int middle = rowStart + width / 2;
+            for (int x1 = rowStart, x2 = rowStart + width - 1; x1 < middle; x1++, x2--) {
+                unsigned char temp = tempData[x1];
+                tempData[x1] = tempData[x2];
+                tempData[x2] = temp;
+            }
+        }
+        return;
+    }
 }
