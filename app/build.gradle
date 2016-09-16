@@ -14,9 +14,9 @@ android {
 //            cmake {
 //                cppFlags ""
 //            }
-//            ndkBuild {
-//                abiFilters "armeabi-v7a", "armeabi"
-//            }
+            ndkBuild {
+                abiFilters "armeabi-v7a"
+            }
         }
     }
     buildTypes {

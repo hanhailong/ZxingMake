@@ -25,13 +25,12 @@ import android.os.Message;
 import com.dtr.zxing.activity.CaptureActivity;
 import com.dtr.zxing.camera.CameraManager;
 import com.dtr.zxing.decode.DecodeThread;
-import com.google.zxing.Result;
 import com.wuba.zxing.R;
 
 /**
  * This class handles all the messaging which comprises the state machine for
  * capture.
- * 
+ *
  * @author dswitkin@google.com (Daniel Switkin)
  */
 public class CaptureActivityHandler extends Handler {

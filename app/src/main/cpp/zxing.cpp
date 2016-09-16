@@ -42,7 +42,7 @@ Java_com_wuba_zxing_QbarNative_decode(JNIEnv *env, jobject instance,
         MultiFormatReader reader;
         reader.setHints(hints);
         Ref<Result> result(reader.decodeWithState(image));
-        
+
         // Output the result.
         codeResult = result->getText()->getText();
         cout << result->getText()->getText() << endl;
