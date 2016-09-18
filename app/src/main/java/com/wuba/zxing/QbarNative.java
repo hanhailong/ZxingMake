@@ -7,7 +7,7 @@ package com.wuba.zxing;
 public class QbarNative {
 
     static {
-        System.loadLibrary("zxing");
+        System.loadLibrary("wubaZxing");
     }
 
     /**

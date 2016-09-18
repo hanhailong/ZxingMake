@@ -1,7 +1,7 @@
 LOCAL_PATH := $(call my-dir)
 
 include $(CLEAR_VARS)
-LOCAL_MODULE := zxing
+LOCAL_MODULE := wubaZxing
 
 LOCAL_CPP_FEATURES += exceptions
 
